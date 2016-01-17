@@ -1,8 +1,8 @@
 #ifndef SRC_SUBSYSTEMS_DRIVESUBSYSTEM_H_
 #define SRC_SUBSYSTEMS_DRIVESUBSYSTEM_H_
 
+#include <WPILib.h>
 #include "Commands/Subsystem.h"
-#include "WPILib.h"
 
 class DriveSubsystem: public Subsystem
 {

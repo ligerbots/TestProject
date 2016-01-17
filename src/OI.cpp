@@ -1,9 +1,10 @@
+#include <WPILib.h>
 #include "OI.h"
-#include "WPILib.h"
 #include <Utils/WPILibException.h>
+#include "CommandBase.h"
 
 OI::OI() {
-	pDriverStation = DriverStation::GetInstance();
+	pDriverStation = &DriverStation::GetInstance();
 	pLiveWindow = LiveWindow::GetInstance();
 	pXboxController = new Joystick(0);
 	pLogitechJoystick = new Joystick(1);
@@ -18,8 +19,9 @@ void OI::registerButton(Joystick* joystick,
 		ButtonEvent when, Command* command) {
 	JoystickButton* button = NULL;
 	// check if button is already there
-	if (buttonsMap->count(buttonNumber) > 0) {
-		button = (*buttonsMap)[buttonNumber];
+	std::map<int, JoystickButton*>::iterator it = buttonsMap->find(buttonNumber);
+	if (it != buttonsMap->end()) {
+		button = it->second;
 	} else {
 		button = new JoystickButton(joystick, buttonNumber);
 		buttonsMap->insert(std::make_pair(buttonNumber, button));

@@ -1,8 +1,8 @@
 #ifndef TurnCommand_H
 #define TurnCommand_H
 
+#include <WPILib.h>
 #include "../CommandBase.h"
-#include "WPILib.h"
 
 class TurnCommand: public CommandBase
 {
@@ -18,7 +18,7 @@ public:
 protected:
 	double targetAngle;
 	double currentAngle;
-	bool directionToTurn;
+	static double PROPORTIONAL_CONSTANT;
 };
 
 #endif

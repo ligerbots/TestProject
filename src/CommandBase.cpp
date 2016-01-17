@@ -1,3 +1,4 @@
+#include <WPILib.h>
 #include "CommandBase.h"
 #include "Commands/ExampleCommand.h"
 #include "Commands/DriveJoystickCommand.h"

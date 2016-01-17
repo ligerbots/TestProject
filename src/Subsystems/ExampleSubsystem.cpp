@@ -1,3 +1,4 @@
+#include <WPILib.h>
 #include "ExampleSubsystem.h"
 #include "../RobotMap.h"
 

@@ -1,7 +1,7 @@
 #ifndef OI_H
 #define OI_H
 
-#include "WPILib.h"
+#include <WPILib.h>
 
 // cppcheck-suppress noCopyConstructor
 class OI {

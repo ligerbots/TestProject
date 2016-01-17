@@ -1,8 +1,8 @@
 #ifndef NavXSubsystem_H
 #define NavXSubsystem_H
 
+#include <WPILib.h>
 #include "Commands/Subsystem.h"
-#include "WPILib.h"
 #include "RobotMap.h"
 
 /**

@@ -1,6 +1,6 @@
+#include <WPILib.h>
 #include "DriveSubsystem.h"
 #include "../RobotMap.h"
-#include "WPILib.h"
 
 DriveSubsystem::DriveSubsystem() :
 		Subsystem("DriveSubsystem") {

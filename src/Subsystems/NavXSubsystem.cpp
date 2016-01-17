@@ -1,3 +1,4 @@
+#include <WPILib.h>
 #include "NavXSubsystem.h"
 #include "../RobotMap.h"
 
@@ -10,5 +11,5 @@ void NavXSubsystem::InitDefaultCommand() {
 }
 
 void NavXSubsystem::ZeroYaw(){
-	RobotMap::pNavX->ZeroYaw();
+//	RobotMap::pNavX->ZeroYaw();
 }

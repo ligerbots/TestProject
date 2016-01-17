@@ -14,15 +14,15 @@
   <!-- <property name="version" value=""/> -->
 
   <!-- By default the system team number is used -->
-  <!-- <property name="team-number" value=""/> -->
+  <property name="team-number" value="2877"/>
 
   <!-- By default the target is set to 10.TE.AM.2 -->
-  <!-- <property name="target" value=""/> -->
+  <property name="target" value="10.28.77.104"/>
   
   <property file="${user.home}/wpilib/wpilib.properties"/>
   <property file="build.properties"/>
-  <property file="${user.home}/wpilib/cpp/${version}/ant/build.properties"/>
+  <property file="${user.home}/wpilib/cpp/current/ant/build.properties"/>
   
-  <import file="${wpilib.ant.dir}/build.xml"/>
+  <import file="${user.home}/wpilib/cpp/current/ant/build.xml"/>
 
 </project> 

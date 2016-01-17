@@ -5,6 +5,7 @@
  *      Author: Erik
  */
 
+#include <WPILib.h>
 #include <Subsystems/Subsystems.h>
 
 DriveSubsystem* Subsystems::pDriveSubsystem = NULL;

@@ -1,10 +1,4 @@
-/*
- * WPILibException.cpp
- *
- *  Created on: Dec 25, 2015
- *      Author: Erik
- */
-
+#include <WPILib.h>
 #include <Utils/WPILibException.h>
 
 WPILibException::WPILibException(Error* pWPIError_) :

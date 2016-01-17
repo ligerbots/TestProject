@@ -1,8 +1,7 @@
 #ifndef COMMAND_BASE_H
 #define COMMAND_BASE_H
 
-#include <string>
-#include "WPILib.h"
+#include <WPILib.h>
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.

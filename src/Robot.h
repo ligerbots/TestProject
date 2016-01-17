@@ -8,14 +8,12 @@
 #ifndef SRC_ROBOT_H_
 #define SRC_ROBOT_H_
 
-#include "WPILib.h"
+#include <WPILib.h>
 #include "OI.h"
-#include "Utils/Parameter.h"
 
 class Robot: public IterativeRobot {
 public:
 	OI* pOperatorInterface;
-	Parameter<std::string>* testParameter;
 	static Robot* instance;
 
 	Robot();

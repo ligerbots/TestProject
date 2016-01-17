@@ -1,8 +1,12 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#include "WPILib.h"
+#include <WPILib.h>
 #include "AHRS.h"
+
+#define INITIALIZE_IF_NULL(x, y) if(x != NULL){\
+		x = y;\
+	}
 
 /**
  * Stores ID numbers for various hardware components, and the WPILib objects for the hardware as well
@@ -21,6 +25,7 @@ public:
 	static AHRS* pNavX;
 
 	static void init();
+	static bool isInited();
 private:
 	static bool inited;
 	static CANTalon* createCANTalon(int canNumber);

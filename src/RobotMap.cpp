@@ -1,10 +1,4 @@
-/*
- * RobotMap.cpp
- *
- *  Created on: Dec 25, 2015
- *      Author: Erik
- */
-
+#include <WPILib.h>
 #include "RobotMap.h"
 #include <stdexcept>
 #include "Utils/WPILibException.h"
@@ -20,43 +14,51 @@ AHRS* RobotMap::pNavX = NULL;
  * Creates a new CANTalon or throws an exception on failure
  * @param canNumber The CAN ID of the CANTalon
  * @return The CANTalon if successful
- * @throws WPILibException on a WPILib error; std::runtime_error on other problems
+ * @throws WPILibException on a WPILib error; std::runtime_error if CANTalon didn't construct
  */
 CANTalon* RobotMap::createCANTalon(int canNumber) {
 	CANTalon* pCanTalon = new CANTalon(canNumber);
-	if(pCanTalon == NULL){
-		throw std::runtime_error("Failed to initialize CANTalon (pointer is null)");
-	} else {
-		Error& error = pCanTalon->GetError();
-		if(error.GetCode() != 0){
-			throw WPILibException(&error);
-		} else {
-			return pCanTalon;
-		}
-	}
+
+	THROW_IF_NULL(pCanTalon);
+	THROW_IF_ERROR(pCanTalon);
+
+	return pCanTalon;
+}
+
+bool RobotMap::isInited() {
+	return inited;
 }
 
 void RobotMap::init() {
 	if (inited)
 		return;
-	try {
-		// initialize all motor controllers
-		pDriveLeft1 = createCANTalon(CAN_DRIVE_LEFT1);
-		pDriveLeft2 = createCANTalon(CAN_DRIVE_LEFT2);
-		pDriveRight1 = createCANTalon(CAN_DRIVE_RIGHT1);
-		pDriveRight2 = createCANTalon(CAN_DRIVE_RIGHT2);
 
-		// initialized the navX IMU
-		pNavX = new AHRS(SPI::Port::kMXP);
+	bool errors = false;
 
+	// initialize all motor controllers
+	TRY_AND_REPORT_ERROR(
+			INITIALIZE_IF_NULL(pDriveLeft1, createCANTalon(CAN_DRIVE_LEFT1)),
+			errors = true);
+	TRY_AND_REPORT_ERROR(
+			INITIALIZE_IF_NULL(pDriveLeft2, createCANTalon(CAN_DRIVE_LEFT2)),
+			errors = true);
+	TRY_AND_REPORT_ERROR(
+			INITIALIZE_IF_NULL(pDriveRight1, createCANTalon(CAN_DRIVE_RIGHT1)),
+			errors = true);
+	TRY_AND_REPORT_ERROR(
+			INITIALIZE_IF_NULL(pDriveRight2, createCANTalon(CAN_DRIVE_RIGHT2)),
+			errors = true);
+
+	// initialize the navX IMU
+	TRY_AND_REPORT_ERROR(
+			{ INITIALIZE_IF_NULL(pNavX, new AHRS(SPI::Port::kMXP)); THROW_IF_NULL(pNavX); },
+			errors = true);
+
+	if (errors) {
+		printf("Problems initializing RobotMap");
+	} else {
 		// no problems up to this point; mark that RobotMap is initialized
 		inited = true;
 		printf("RobotMap initialized");
-	} catch (const std::exception &ex) {
-		std::string err_string = "Error in RobotMap::init() ";
-		err_string += ex.what();
-		printf(err_string.c_str());
-		DriverStation::ReportError(err_string);
 	}
-
 }

@@ -1,13 +1,13 @@
 #ifndef SRC_COMMANDS_DRIVEJOYSTICKCOMMAND_H_
 #define SRC_COMMANDS_DRIVEJOYSTICKCOMMAND_H_
 
+#include <WPILib.h>
 #include "../CommandBase.h"
-#include "WPILib.h"
 #include "Robot.h"
 
 class DriveJoystickCommand: public CommandBase
 {
-protected:
+public:
 	/**
 	 * Clamps the specified value between min and max. Used to enforce TURN_MAX and LINEAR_MAX
 	 * @param value The value to clamp
@@ -16,7 +16,6 @@ protected:
 	 * @return The clamped value
 	 */
 	static double clampJoystickValue(double value, double min, double max);
-public:
 	DriveJoystickCommand();
 	void Initialize();
 	void Execute();

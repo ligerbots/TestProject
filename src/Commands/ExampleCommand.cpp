@@ -1,3 +1,4 @@
+#include <WPILib.h>
 #include "ExampleCommand.h"
 
 ExampleCommand::ExampleCommand()
@@ -33,11 +34,6 @@ void ExampleCommand::End()
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void ExampleCommand::Interrupted()
-{
-
-}
-
-void ExampleCommand::ValueChanged(ITable* source, const std::string& key, EntryValue value, bool isNew)
 {
 
 }

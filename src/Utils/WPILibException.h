@@ -8,8 +8,36 @@
 #ifndef SRC_UTILS_WPILIBEXCEPTION_H_
 #define SRC_UTILS_WPILIBEXCEPTION_H_
 
+#include <WPILib.h>
 #include <exception>
-#include "WPILib.h"
+
+/**
+ * This macro throws an exception if there is currently an error in the specified WPILib object
+ */
+#define THROW_IF_ERROR(errorBase) Error& MACRO_THROW_IF_ERROR_Error = errorBase->GetError();\
+	if(MACRO_THROW_IF_ERROR_Error.GetCode() != 0){\
+		throw WPILibException(&MACRO_THROW_IF_ERROR_Error);\
+	}
+// Terrible name to avoid name conflicts
+
+/**
+ * This macro throws a std::runtime_exception if the parameter is null
+ */
+#define THROW_IF_NULL(pointer) if(pointer == NULL){\
+		throw std::runtime_error("Failed to initialize object (pointer is null)");\
+	}
+
+/**
+ * This macro takes 2 code blocks, wraps the first in a try block and puts the second in the catch block.
+ * The catch block automatically prints the error and reports it to DriverStation
+ */
+#define TRY_AND_REPORT_ERROR(code, catchCode) try { code; } catch (const std::exception &ex) {\
+		std::string err_string = "Caught exception ";\
+		err_string += ex.what();\
+		std::printf(err_string.c_str());\
+		DriverStation::ReportError(err_string);\
+		catchCode;\
+	}
 
 /**
  * Wraps a WPILib Error object as a std::exception
