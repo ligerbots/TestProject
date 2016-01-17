@@ -38,12 +38,9 @@ void NTUpdater::removeParameter(std::string key,
 	std::map<std::string, NTParameterVector>::iterator it = parametersMap.find(
 			key);
 	if (it != parametersMap.end()) {
-		for (NTParameterVector::iterator it2 = it->second.begin();
-						it2 != it->second.end(); ++it2) {
-			if(*(*it2) == *(parameter)){
-				it->second.erase(it2);
-			}
-		}
+		it->second.erase(
+				std::remove(it->second.begin(), it->second.end(), parameter),
+				it->second.end());
 	}
 }
 
@@ -55,6 +52,7 @@ void NTUpdater::ValueChanged(ITable* source, llvm::StringRef key,
 	if (it != parametersMap.end()) {
 		for (NTParameterVector::iterator it2 = it->second.begin();
 				it2 != it->second.end(); ++it2) {
+			std::lock_guard<std::mutex> guard((*it2)->lock);
 			(*it2)->updateValue();
 		}
 	}

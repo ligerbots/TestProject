@@ -6,7 +6,7 @@
 
 Robot* Robot::instance = NULL;
 
-Robot::Robot() {
+Robot::Robot() : testParam("Test_Frame_Counter") {
 	if (Robot::instance != NULL) {
 		printf("Warning: Robot instance already exists!");
 	}
@@ -69,10 +69,15 @@ void Robot::TeleopInit() {
 
 	if (CommandBase::pDriveJoystickCommand != NULL)
 		CommandBase::pDriveJoystickCommand->Start();
+
+	testParam = 0;
 }
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
+
+	// using fancy operator methods on Parameter
+	++testParam;
 
 	if (RobotMap::pNavX) {
 		bool reset_yaw_button_pressed =
@@ -134,7 +139,6 @@ void Robot::TeleopPeriodic() {
 		SmartDashboard::PutNumber("RawMag_Z", RobotMap::pNavX->GetRawMagZ());
 		SmartDashboard::PutNumber("IMU_Temp_C", RobotMap::pNavX->GetTempC());
 		/* Omnimount Yaw Axis Information                                           */
-		/* For more info, see http://navx-mxp.kauailabs.com/installation/omnimount  */
 		AHRS::BoardYawAxis yaw_axis = RobotMap::pNavX->GetBoardYawAxis();
 		SmartDashboard::PutString("YawAxisDirection",
 				yaw_axis.up ? "Up" : "Down");

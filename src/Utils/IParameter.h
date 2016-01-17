@@ -3,8 +3,10 @@
 
 class IParameter {
 public:
-	virtual void updateValue();
-	virtual ~IParameter();
+	std::mutex lock;
+	virtual void updateValue() = 0;
+	virtual ~IParameter(){
+	}
 };
 
 #endif /* SRC_UTILS_IPARAMETER_H_ */
