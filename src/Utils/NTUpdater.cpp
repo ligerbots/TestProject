@@ -5,6 +5,7 @@ std::string NTUpdater::TABLE_NAME = "Preferences";
 NTUpdater* NTUpdater::instance = NULL;
 std::shared_ptr<NetworkTable> NTUpdater::NETWORK_TABLE;
 std::map<std::string, NTParameterVector> NTUpdater::parametersMap;
+std::mutex NTUpdater::lock;
 
 NTUpdater::NTUpdater() {
 }
@@ -22,6 +23,7 @@ void NTUpdater::registerNTUpdater() {
 
 void NTUpdater::addParameter(std::string key,
 		std::shared_ptr<IParameter> parameter) {
+	std::lock_guard<std::mutex> guard(lock);
 	std::map<std::string, NTParameterVector>::iterator it = parametersMap.find(
 			key);
 	if (it == parametersMap.end()) {
@@ -35,6 +37,7 @@ void NTUpdater::addParameter(std::string key,
 
 void NTUpdater::removeParameter(std::string key,
 		std::shared_ptr<IParameter> parameter) {
+	std::lock_guard<std::mutex> guard(lock);
 	std::map<std::string, NTParameterVector>::iterator it = parametersMap.find(
 			key);
 	if (it != parametersMap.end()) {

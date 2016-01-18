@@ -18,6 +18,7 @@ class NTUpdater: public ITableListener {
 protected:
 	static NTUpdater* instance;
 	static std::map<std::string, NTParameterVector> parametersMap;
+	static std::mutex lock;
 public:
 	static std::string TABLE_NAME;
 	static std::shared_ptr<NetworkTable> NETWORK_TABLE;

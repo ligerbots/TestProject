@@ -6,9 +6,17 @@
 #include "NTUpdater.h"
 
 /**
- * Parameter is a class to effectively manage preferences that would normally be used through WPILib Preferences
- * The advantage of using Parameter is that it will be notified of updates from the Driver Station so the program doesn't have to restart
- * Instead of <pre><code>int myInt = Preferences::GetInstance()->GetInt("MyInt")</code></pre> use <pre><code>Parameter<int> myInt("MyInt");</code></pre>
+ * Parameter is a class to effectively manage preferences that would normally
+ * be used through WPILib Preferences. The advantage of using Parameter is that
+ * it will be notified of updates from the SmartDashboard so the program doesn't
+ * have to restart
+ * Instead of
+ * <pre><code>int myInt = Preferences::GetInstance()->GetInt("MyInt")</code></pre>
+ * use
+ * <pre><code>Parameter<int> myInt("MyInt");</code></pre>
+ *
+ * Parameter also includes many overriden operator functions, so you can
+ * directly use operators on Parameters and have them update on file and in network tables
  */
 template<typename Parameter_Type> class Parameter: public IParameter {
 protected:
