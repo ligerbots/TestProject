@@ -4,9 +4,10 @@
 #include <WPILib.h>
 #include "AHRS.h"
 
-#define INITIALIZE_IF_NULL(x, y) if(x != NULL){\
+#define INITIALIZE_IF_NULL(x, y) if(x == NULL){\
+		printf("Initializing " #x "\n");\
 		x = y;\
-	}
+	} else { printf(#x " is not null, skipping\n"); }
 
 /**
  * Stores ID numbers for various hardware components, and the WPILib objects for the hardware as well

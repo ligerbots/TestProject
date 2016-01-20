@@ -33,6 +33,8 @@ void RobotMap::init() {
 	if (inited)
 		return;
 
+	printf("RobotMap::init\r\n");
+
 	bool errors = false;
 
 	// initialize all motor controllers
@@ -55,10 +57,10 @@ void RobotMap::init() {
 			errors = true);
 
 	if (errors) {
-		printf("Problems initializing RobotMap");
+		printf("Problems initializing RobotMap\n");
 	} else {
 		// no problems up to this point; mark that RobotMap is initialized
 		inited = true;
-		printf("RobotMap initialized");
+		printf("RobotMap initialized\n");
 	}
 }

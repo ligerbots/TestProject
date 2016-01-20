@@ -16,6 +16,7 @@ NTUpdater::~NTUpdater() {
 void NTUpdater::registerNTUpdater() {
 	if (instance != NULL)
 		return;
+	printf("Initializing Parameter updater\n");
 	instance = new NTUpdater();
 	NETWORK_TABLE = NetworkTable::GetTable(TABLE_NAME);
 	NETWORK_TABLE->AddTableListener(instance);

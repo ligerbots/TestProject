@@ -8,18 +8,25 @@ Robot* Robot::instance = NULL;
 
 Robot::Robot() : testParam("Test_Frame_Counter") {
 	if (Robot::instance != NULL) {
-		printf("Warning: Robot instance already exists!");
+		printf("Warning: Robot instance already exists!\n");
 	}
 
+	printf("Robot constructor\n");
+
 	// specific order
+	printf("Initializing OI\n");
 	pOperatorInterface = new OI();
+	printf("Initializing RobotMap\n");
 	RobotMap::init(); // initialize hardware interfaces
+	printf("Initializing subsystems\n");
 	Subsystems::init(); // initialize subsystems (depend on hardware)
+	printf("Initializing commandbase\n");
 	CommandBase::init(); // initialize commands (depend on subsystems, OI)
+	printf("Registering OI commands\n");
 	pOperatorInterface->registerCommands(); // register commands to controller buttons
 
 	Robot::instance = this;
-	printf("Robot constructor completed");
+	printf("Robot constructor completed\n");
 }
 
 Robot::~Robot() {
@@ -27,7 +34,7 @@ Robot::~Robot() {
 }
 
 void Robot::DisabledInit() {
-	printf("Test robot disabled initialize");
+	printf("--- Robot disabledinit ---\n");
 }
 
 void Robot::RobotInit() {
@@ -35,7 +42,7 @@ void Robot::RobotInit() {
 		pOperatorInterface->pLiveWindow->AddSensor("IMU", "Gyro",
 				RobotMap::pNavX);
 	}
-	printf("RobotInit complete");
+	printf("RobotInit complete\n");
 }
 
 void Robot::DisabledPeriodic() {
@@ -71,6 +78,7 @@ void Robot::TeleopInit() {
 		CommandBase::pDriveJoystickCommand->Start();
 
 	testParam = 0;
+	printf("--- Teleop init ---\n");
 }
 
 void Robot::TeleopPeriodic() {
@@ -78,6 +86,7 @@ void Robot::TeleopPeriodic() {
 
 	// using fancy operator methods on Parameter
 	++testParam;
+	SmartDashboard::PutNumber("TestParameter", testParam.get());
 
 	if (RobotMap::pNavX) {
 		bool reset_yaw_button_pressed =

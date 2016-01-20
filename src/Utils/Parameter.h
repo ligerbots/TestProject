@@ -23,6 +23,7 @@ protected:
 	std::string key;
 	Parameter_Type value;
 	void initialize(std::string key) {
+		printf(("Initializing new parameter for " + key + "\n").c_str());
 		this->key = key;
 		// initialize preferences
 		Preferences::GetInstance();
@@ -53,6 +54,10 @@ public:
 
 	void set(Parameter_Type val);
 	void updateValue();
+
+	Parameter_Type& get() {
+		return value;
+	}
 
 	Parameter& operator=(const Parameter_Type& other) {
 		std::lock_guard<std::mutex> guard(lock);
@@ -88,38 +93,49 @@ public:
 	Parameter& operator++() {
 		std::lock_guard<std::mutex> guard(lock);
 		updateValue();
-		set(--value);
+		set(++value);
 		return *this;
 	}
 	Parameter& operator--() {
 		std::lock_guard<std::mutex> guard(lock);
 		updateValue();
-		set(++value);
+		set(--value);
 		return *this;
 	}
 
-	bool operator==(const Parameter_Type& other) {
-		updateValue();
+	Parameter_Type operator+(const Parameter_Type& other) const {
+		return value + other;
+	}
+
+	Parameter_Type operator-(const Parameter_Type& other) const {
+		return value - other;
+	}
+
+	Parameter_Type operator*(const Parameter_Type& other) const {
+		return value * other;
+	}
+
+	Parameter_Type operator/(const Parameter_Type& other) const {
+		return value / other;
+	}
+
+	bool operator==(const Parameter_Type& other) const {
 		return value == other;
 	}
 
-	bool operator==(const Parameter& other) {
-		updateValue();
+	bool operator==(const Parameter& other) const {
 		return this->value == other.value;
 	}
 
-	bool operator!=(const Parameter_Type& other) {
-		updateValue();
+	bool operator!=(const Parameter_Type& other) const {
 		return value != other;
 	}
 
-	bool operator!=(const Parameter& other) {
-		updateValue();
+	bool operator!=(const Parameter& other) const {
 		return this->value != other.value;
 	}
 
-	bool operator!() {
-		updateValue();
+	bool operator!() const {
 		return !value;
 	}
 };
