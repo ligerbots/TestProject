@@ -1,3 +1,5 @@
 Debug/**/*
 tmp/**/*
 .settings/language.settings.xml
+src/TestProject.h
+src/TestProject.h.gch
