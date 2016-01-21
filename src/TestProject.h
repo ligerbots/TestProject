@@ -1,9 +1,13 @@
-#include <WPILib.h> 
+#include <WPILib.h>
+#include <AHRS.h>
+#include <math.h>
+#include <exception>
 #include "CommandBase.h"
 #include "Commands/DriveJoystickCommand.h"
 #include "Commands/ExampleCommand.h"
 #include "Commands/TurnCommand.h"
 #include "Debug.h"
+#include "Includes.h"
 #include "OI.h"
 #include "Robot.h"
 #include "RobotMap.h"
@@ -11,7 +15,6 @@
 #include "Subsystems/ExampleSubsystem.h"
 #include "Subsystems/NavXSubsystem.h"
 #include "Subsystems/Subsystems.h"
-#include "TestProject.h"
 #include "Utils/IParameter.h"
 #include "Utils/NTUpdater.h"
 #include "Utils/Parameter.h"

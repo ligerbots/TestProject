@@ -1,9 +1,13 @@
-#include <WPILib.h>
-#include "OI.h"
-#include <Utils/WPILibException.h>
-#include "CommandBase.h"
+#include <TestProject.h>
 
-OI::OI() {
+OI::OI() : xboxButtons() {
+	pDriverStation = &DriverStation::GetInstance();
+	pLiveWindow = LiveWindow::GetInstance();
+	pXboxController = new Joystick(0);
+	pLogitechJoystick = new Joystick(1);
+}
+
+OI::OI(const OI& other) : xboxButtons(other.xboxButtons) {
 	pDriverStation = &DriverStation::GetInstance();
 	pLiveWindow = LiveWindow::GetInstance();
 	pXboxController = new Joystick(0);
@@ -11,7 +15,8 @@ OI::OI() {
 }
 
 void OI::registerCommands() {
-	registerButton(pXboxController, &xboxButtons, 2, PRESSED, CommandBase::pTurnCommand);
+	registerButton(pXboxController, &xboxButtons, 2, PRESSED,
+			CommandBase::pTurnCommand);
 }
 
 void OI::registerButton(Joystick* joystick,
@@ -19,7 +24,8 @@ void OI::registerButton(Joystick* joystick,
 		ButtonEvent when, Command* command) {
 	JoystickButton* button = NULL;
 	// check if button is already there
-	std::map<int, JoystickButton*>::iterator it = buttonsMap->find(buttonNumber);
+	std::map<int, JoystickButton*>::iterator it = buttonsMap->find(
+			buttonNumber);
 	if (it != buttonsMap->end()) {
 		button = it->second;
 	} else {
@@ -28,7 +34,7 @@ void OI::registerButton(Joystick* joystick,
 	}
 
 	// attach the command to the correct event
-	switch(when){
+	switch (when) {
 	case ACTIVE:
 		button->WhenActive(command);
 		break;

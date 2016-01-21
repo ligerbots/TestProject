@@ -1,6 +1,4 @@
-#include <WPILib.h>
-#include "ExampleSubsystem.h"
-#include "../RobotMap.h"
+#include <TestProject.h>
 
 ExampleSubsystem::ExampleSubsystem() :
 		Subsystem("ExampleSubsystem")

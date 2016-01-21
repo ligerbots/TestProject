@@ -1,7 +1,6 @@
-#include <WPILib.h>
-#include "Parameter.h"
-// specialized methods
+#include <TestProject.h>
 
+// specialized methods
 template<> Parameter<int>::Parameter(){
 	value = 0;
 }

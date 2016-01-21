@@ -3,7 +3,6 @@
 
 #include <WPILib.h>
 
-// cppcheck-suppress noCopyConstructor
 class OI {
 public:
 	enum ButtonEvent {
@@ -11,6 +10,7 @@ public:
 	};
 
 	OI();
+	OI(const OI& other);
 	DriverStation* pDriverStation;
 	LiveWindow* pLiveWindow;
 	Joystick* pXboxController;

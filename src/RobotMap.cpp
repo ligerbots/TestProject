@@ -1,7 +1,4 @@
-#include <WPILib.h>
-#include "RobotMap.h"
-#include <stdexcept>
-#include "Utils/WPILibException.h"
+#include <TestProject.h>
 
 bool RobotMap::inited = false;
 CANTalon* RobotMap::pDriveLeft1 = NULL;

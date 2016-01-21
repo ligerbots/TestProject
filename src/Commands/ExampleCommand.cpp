@@ -1,5 +1,4 @@
-#include <WPILib.h>
-#include "ExampleCommand.h"
+#include <TestProject.h>
 
 ExampleCommand::ExampleCommand()
 {

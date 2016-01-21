@@ -1,14 +1,9 @@
-#include <WPILib.h>
-#include "TurnCommand.h"
-#include <math.h>
-#include "RobotMap.h"
-#include "Subsystems/Subsystems.h"
-#include "Commands/DriveJoystickCommand.h"
+#include <TestProject.h>
 
-double TurnCommand::PROPORTIONAL_CONSTANT = 0.1;
+double TurnCommand::PROPORTIONAL_CONSTANT = 0.5;
 
 TurnCommand::TurnCommand() {
-	printf("TurnCommand: constructor");
+	printf("TurnCommand: constructor\n");
 	Requires(Subsystems::pDriveSubsystem);
 	Requires(Subsystems::pNavXSubsystem);
 	targetAngle = 0;
@@ -16,7 +11,7 @@ TurnCommand::TurnCommand() {
 }
 
 void TurnCommand::Initialize() {
-	printf("TurnCommand::Initialize");
+	printf("TurnCommand::Initialize\n");
 	// make sure it doesn't get stuck turning forever if something fails
 	SetTimeout(2);
 	currentAngle = RobotMap::pNavX->GetYaw() * M_PI / 180;
@@ -25,6 +20,7 @@ void TurnCommand::Initialize() {
 }
 
 void TurnCommand::Execute() {
+	printf("Turncommand::execute\n");
 	currentAngle = RobotMap::pNavX->GetYaw() * M_PI / 180;
 
 	double normalizedCurrentAngle = fmod(currentAngle + 2 * M_PI, 2 * M_PI);

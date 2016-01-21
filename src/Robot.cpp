@@ -1,8 +1,4 @@
-#include <WPILib.h>
-#include "Robot.h"
-#include "CommandBase.h"
-#include "RobotMap.h"
-#include "Subsystems/Subsystems.h"
+#include <TestProject.h>
 
 Robot* Robot::instance = NULL;
 
@@ -85,7 +81,9 @@ void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 
 	// using fancy operator methods on Parameter
-	++testParam;
+	if(pOperatorInterface->pDriverStation->GetStickButton(0, 3)){
+		++testParam;
+	}
 	SmartDashboard::PutNumber("TestParameter", testParam.get());
 
 	if (RobotMap::pNavX) {

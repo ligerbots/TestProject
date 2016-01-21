@@ -1,5 +1,4 @@
-#include <WPILib.h>
-#include <Utils/WPILibException.h>
+#include <TestProject.h>
 
 WPILibException::WPILibException(Error* pWPIError_) :
 		pWpiError(pWPIError_) {

@@ -1,6 +1,4 @@
-#include <WPILib.h>
-#include "DriveJoystickCommand.h"
-#include "Subsystems/Subsystems.h"
+#include <TestProject.h>
 
 double DriveJoystickCommand::TURN_MAX = 0.7;
 double DriveJoystickCommand::LINEAR_MAX = 0.6;

@@ -1,5 +1,4 @@
-#include <WPILib.h>
-#include <Utils/NTUpdater.h>
+#include <TestProject.h>
 
 std::string NTUpdater::TABLE_NAME = "Preferences";
 NTUpdater* NTUpdater::instance = NULL;

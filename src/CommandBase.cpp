@@ -1,26 +1,19 @@
-#include <WPILib.h>
-#include "CommandBase.h"
-#include "Commands/ExampleCommand.h"
-#include "Commands/DriveJoystickCommand.h"
-#include "Commands/TurnCommand.h"
+#include <TestProject.h>
 
 Command* CommandBase::pAutonomousCommand = NULL;
 Command* CommandBase::pDriveJoystickCommand = NULL;
 Command* CommandBase::pTurnCommand = NULL;
 
 CommandBase::CommandBase(char const *name) :
-		Command(name)
-{
+		Command(name) {
 }
 
 CommandBase::CommandBase() :
-		Command()
-{
+		Command() {
 
 }
 
-void CommandBase::init()
-{
+void CommandBase::init() {
 	pAutonomousCommand = new ExampleCommand();
 	pDriveJoystickCommand = new DriveJoystickCommand();
 	pTurnCommand = new TurnCommand();

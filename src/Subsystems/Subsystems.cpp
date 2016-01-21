@@ -1,12 +1,4 @@
-/*
- * Subsystems.cpp
- *
- *  Created on: Jan 3, 2016
- *      Author: Erik
- */
-
-#include <WPILib.h>
-#include <Subsystems/Subsystems.h>
+#include <TestProject.h>
 
 DriveSubsystem* Subsystems::pDriveSubsystem = NULL;
 NavXSubsystem* Subsystems::pNavXSubsystem = NULL;

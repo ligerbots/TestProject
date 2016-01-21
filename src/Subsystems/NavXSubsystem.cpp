@@ -1,6 +1,4 @@
-#include <WPILib.h>
-#include "NavXSubsystem.h"
-#include "../RobotMap.h"
+#include <TestProject.h>
 
 NavXSubsystem::NavXSubsystem() :
 		Subsystem("NavXSubsystem") {
