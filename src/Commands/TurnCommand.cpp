@@ -1,11 +1,12 @@
 #include <TestProject.h>
 
-double TurnCommand::PROPORTIONAL_CONSTANT = 0.5;
+Parameter<double> TurnCommand::PROPORTIONAL_CONSTANT("TurnCommand_PROPORTIONAL_CONSTANT");
 
-TurnCommand::TurnCommand() {
+TurnCommand::TurnCommand(double targetDeltaAngle) {
 	printf("TurnCommand: constructor\n");
 	Requires(Subsystems::pDriveSubsystem);
 	Requires(Subsystems::pNavXSubsystem);
+	this->targetDeltaAngle = targetDeltaAngle;
 	targetAngle = 0;
 	currentAngle = 0;
 }
@@ -14,9 +15,9 @@ void TurnCommand::Initialize() {
 	printf("TurnCommand::Initialize\n");
 	// make sure it doesn't get stuck turning forever if something fails
 	SetTimeout(2);
+
 	currentAngle = RobotMap::pNavX->GetYaw() * M_PI / 180;
-	// XXX: debug, turn 90 degrees
-	targetAngle = currentAngle + M_PI;
+	targetAngle = currentAngle + targetDeltaAngle;
 }
 
 void TurnCommand::Execute() {

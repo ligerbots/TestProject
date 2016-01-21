@@ -64,8 +64,8 @@ public:
 	virtual ~WPILibException() throw ();
 	/**
 	 * Get an error message for this exception.
-	 * Includes all the info the WPILib Error object has: message, file, line number, and function
-	 * @return The info
+	 * Includes all the information the WPILib Error object has: message, file, line number, and function
+	 * @return The information
 	 */
 	virtual const char* what() const throw ();
 

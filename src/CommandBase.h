@@ -14,7 +14,7 @@ public:
 
 	static Command *pAutonomousCommand;
 	static Command *pDriveJoystickCommand;
-	static Command *pTurnCommand;
+	static Command *pTurn90Command;
 	static void init();
 };
 

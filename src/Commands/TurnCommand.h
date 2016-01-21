@@ -7,7 +7,7 @@
 class TurnCommand: public CommandBase
 {
 public:
-	TurnCommand();
+	explicit TurnCommand(double targetDeltaAngle);
 	virtual void Initialize();
 	virtual void Execute();
 	virtual bool IsFinished();
@@ -16,9 +16,10 @@ public:
 	virtual void setTargetAngle(double angle);
 	virtual double getTargetAngle();
 protected:
+	double targetDeltaAngle;
 	double targetAngle;
 	double currentAngle;
-	static double PROPORTIONAL_CONSTANT;
+	static Parameter<double> PROPORTIONAL_CONSTANT;
 };
 
 #endif

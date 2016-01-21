@@ -5,6 +5,7 @@
 
 class OI {
 public:
+	typedef std::map<uintptr_t, std::vector<JoystickButton*>> JoystickMap_t;
 	enum ButtonEvent {
 		ACTIVE, INACTIVE, PRESSED, RELEASED
 	};
@@ -20,9 +21,8 @@ public:
 	 */
 	void registerCommands();
 protected:
-	std::map<int, JoystickButton*> xboxButtons;
-	void registerButton(Joystick* joystick,
-			std::map<int, JoystickButton*>* buttonsMap, int buttonNumber,
+	JoystickMap_t controllerButtons;
+	void registerButton(Joystick* joystick, int buttonNumber,
 			ButtonEvent when, Command* command);
 };
 

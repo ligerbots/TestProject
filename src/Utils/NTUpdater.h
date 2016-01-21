@@ -12,12 +12,12 @@
 #include "llvm/StringRef.h"
 #include "IParameter.h"
 
-typedef std::vector<std::shared_ptr<IParameter>> NTParameterVector;
+typedef std::vector<std::shared_ptr<IParameter>> NTParameterVector_t;
 
 class NTUpdater: public ITableListener {
 protected:
 	static NTUpdater* instance;
-	static std::map<std::string, NTParameterVector> parametersMap;
+	static std::map<std::string, NTParameterVector_t> parametersMap;
 	static std::mutex lock;
 public:
 	static std::string TABLE_NAME;

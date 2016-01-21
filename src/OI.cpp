@@ -1,13 +1,15 @@
 #include <TestProject.h>
 
-OI::OI() : xboxButtons() {
+OI::OI() :
+		controllerButtons() {
 	pDriverStation = &DriverStation::GetInstance();
 	pLiveWindow = LiveWindow::GetInstance();
 	pXboxController = new Joystick(0);
 	pLogitechJoystick = new Joystick(1);
 }
 
-OI::OI(const OI& other) : xboxButtons(other.xboxButtons) {
+OI::OI(const OI& other) :
+		controllerButtons(other.controllerButtons) {
 	pDriverStation = &DriverStation::GetInstance();
 	pLiveWindow = LiveWindow::GetInstance();
 	pXboxController = new Joystick(0);
@@ -15,37 +17,45 @@ OI::OI(const OI& other) : xboxButtons(other.xboxButtons) {
 }
 
 void OI::registerCommands() {
-	registerButton(pXboxController, &xboxButtons, 2, PRESSED,
-			CommandBase::pTurnCommand);
+	registerButton(pXboxController, 2, PRESSED, CommandBase::pTurn90Command);
 }
 
-void OI::registerButton(Joystick* joystick,
-		std::map<int, JoystickButton*>* buttonsMap, int buttonNumber,
-		ButtonEvent when, Command* command) {
+void OI::registerButton(Joystick* pJoystick, int buttonNumber, ButtonEvent when,
+		Command* pCommand) {
 	JoystickButton* button = NULL;
-	// check if button is already there
-	std::map<int, JoystickButton*>::iterator it = buttonsMap->find(
-			buttonNumber);
-	if (it != buttonsMap->end()) {
-		button = it->second;
+
+	// find the map to use
+	JoystickMap_t::iterator cIt = controllerButtons.find((uintptr_t) pJoystick);
+	if (cIt == controllerButtons.end()) {
+		std::vector<JoystickButton*> apButtons(13);
+		controllerButtons.insert(
+				std::pair<uintptr_t, std::vector<JoystickButton*>>(
+						(uintptr_t) pJoystick, apButtons));
+	}
+
+	cIt = controllerButtons.find((uintptr_t) pJoystick);
+
+	// check if joystick is there
+	if (cIt->second.at(buttonNumber) != NULL) {
+		button = cIt->second.at(buttonNumber);
 	} else {
-		button = new JoystickButton(joystick, buttonNumber);
-		buttonsMap->insert(std::make_pair(buttonNumber, button));
+		button = new JoystickButton(pJoystick, buttonNumber);
+		cIt->second.at(buttonNumber) = button;
 	}
 
 	// attach the command to the correct event
 	switch (when) {
 	case ACTIVE:
-		button->WhenActive(command);
+		button->WhenActive(pCommand);
 		break;
 	case INACTIVE:
-		button->WhenInactive(command);
+		button->WhenInactive(pCommand);
 		break;
 	case PRESSED:
-		button->WhenPressed(command);
+		button->WhenPressed(pCommand);
 		break;
 	case RELEASED:
-		button->WhenReleased(command);
+		button->WhenReleased(pCommand);
 		break;
 	}
 }

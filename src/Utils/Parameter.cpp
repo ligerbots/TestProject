@@ -1,16 +1,28 @@
 #include <TestProject.h>
 
 // specialized methods
-template<> Parameter<int>::Parameter(){
+template<> Parameter<int>::Parameter() {
+	printf("Initializing empty parameter\n");
+	key = "";
 	value = 0;
 }
 
-template<> Parameter<double>::Parameter(){
+template<> Parameter<double>::Parameter() {
+	printf("Initializing empty parameter\n");
+	key = "";
 	value = 0;
 }
 
-template<> Parameter<bool>::Parameter(){
+template<> Parameter<bool>::Parameter() {
+	printf("Initializing empty parameter\n");
+	key = "";
 	value = false;
+}
+
+template<> Parameter<std::string>::Parameter() {
+	printf("Initializing empty parameter\n");
+	key = "";
+	value = "";
 }
 
 template<> void Parameter<int>::set(int val) {

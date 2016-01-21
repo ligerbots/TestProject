@@ -38,6 +38,7 @@ public:
 	Parameter();
 	explicit Parameter(std::string key) :
 			key(key) {
+		printf(("Constructing a new Parameter with key " + key + "\n").c_str());
 		initialize(key);
 	}
 
@@ -62,6 +63,12 @@ public:
 	Parameter& operator=(const Parameter_Type& other) {
 		std::lock_guard<std::mutex> guard(lock);
 		set(other);
+		return *this;
+	}
+
+	Parameter& operator=(const Parameter& other){
+		std::lock_guard<std::mutex> guard(lock);
+		set(other.value);
 		return *this;
 	}
 

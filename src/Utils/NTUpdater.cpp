@@ -3,7 +3,7 @@
 std::string NTUpdater::TABLE_NAME = "Preferences";
 NTUpdater* NTUpdater::instance = NULL;
 std::shared_ptr<NetworkTable> NTUpdater::NETWORK_TABLE;
-std::map<std::string, NTParameterVector> NTUpdater::parametersMap;
+std::map<std::string, NTParameterVector_t> NTUpdater::parametersMap;
 std::mutex NTUpdater::lock;
 
 NTUpdater::NTUpdater() {
@@ -24,10 +24,10 @@ void NTUpdater::registerNTUpdater() {
 void NTUpdater::addParameter(std::string key,
 		std::shared_ptr<IParameter> parameter) {
 	std::lock_guard<std::mutex> guard(lock);
-	std::map<std::string, NTParameterVector>::iterator it = parametersMap.find(
+	std::map<std::string, NTParameterVector_t>::iterator it = parametersMap.find(
 			key);
 	if (it == parametersMap.end()) {
-		NTParameterVector parameterVector;
+		NTParameterVector_t parameterVector;
 		parameterVector.push_back(parameter);
 		parametersMap.insert(std::make_pair(key, parameterVector));
 	} else {
@@ -38,7 +38,7 @@ void NTUpdater::addParameter(std::string key,
 void NTUpdater::removeParameter(std::string key,
 		std::shared_ptr<IParameter> parameter) {
 	std::lock_guard<std::mutex> guard(lock);
-	std::map<std::string, NTParameterVector>::iterator it = parametersMap.find(
+	std::map<std::string, NTParameterVector_t>::iterator it = parametersMap.find(
 			key);
 	if (it != parametersMap.end()) {
 		it->second.erase(
@@ -50,10 +50,10 @@ void NTUpdater::removeParameter(std::string key,
 void NTUpdater::ValueChanged(ITable* source, llvm::StringRef key,
 		std::shared_ptr<nt::Value> value,
 		bool isNew) {
-	std::map<std::string, NTParameterVector>::iterator it = parametersMap.find(
+	std::map<std::string, NTParameterVector_t>::iterator it = parametersMap.find(
 			key);
 	if (it != parametersMap.end()) {
-		for (NTParameterVector::iterator it2 = it->second.begin();
+		for (NTParameterVector_t::iterator it2 = it->second.begin();
 				it2 != it->second.end(); ++it2) {
 			std::lock_guard<std::mutex> guard((*it2)->lock);
 			(*it2)->updateValue();

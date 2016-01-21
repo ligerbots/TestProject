@@ -2,7 +2,7 @@
 
 Command* CommandBase::pAutonomousCommand = NULL;
 Command* CommandBase::pDriveJoystickCommand = NULL;
-Command* CommandBase::pTurnCommand = NULL;
+Command* CommandBase::pTurn90Command = NULL;
 
 CommandBase::CommandBase(char const *name) :
 		Command(name) {
@@ -16,5 +16,5 @@ CommandBase::CommandBase() :
 void CommandBase::init() {
 	pAutonomousCommand = new ExampleCommand();
 	pDriveJoystickCommand = new DriveJoystickCommand();
-	pTurnCommand = new TurnCommand();
+	pTurn90Command = new TurnCommand(M_PI / 2);
 }
