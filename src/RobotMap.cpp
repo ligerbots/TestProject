@@ -17,7 +17,7 @@ CANTalon* RobotMap::createCANTalon(int canNumber) {
 	CANTalon* pCanTalon = new CANTalon(canNumber);
 
 	THROW_IF_NULL(pCanTalon);
-	THROW_IF_ERROR(pCanTalon);
+	WPILibException::throwIfError(pCanTalon);
 
 	return pCanTalon;
 }

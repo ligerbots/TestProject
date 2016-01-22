@@ -4,20 +4,22 @@ double DriveJoystickCommand::TURN_MAX = 0.7;
 double DriveJoystickCommand::LINEAR_MAX = 0.6;
 
 DriveJoystickCommand::DriveJoystickCommand() {
-	printf("DriveJoystickCommand: constructor");
+	printf("DriveJoystickCommand: constructor\n");
 	Requires(Subsystems::pDriveSubsystem);
 }
 
 void DriveJoystickCommand::Initialize() {
-	printf("DriveJoystickCommand: initialize");
+	printf("DriveJoystickCommand: initialize\n");
 	// DriveSubsystem should have set everything correctly
+	SetInterruptible(true);
 }
 
 void DriveJoystickCommand::Execute() {
 	Joystick* pXboxController =
 			Robot::instance->pOperatorInterface->pXboxController;
 
-	if(pXboxController == NULL){
+	if(!WPILibException::isWPIObjectOK(pXboxController)){
+		printf("Xbox controller not present!\n");
 		return;
 	}
 
@@ -45,6 +47,7 @@ void DriveJoystickCommand::End() {
 
 void DriveJoystickCommand::Interrupted() {
 	printf("DriveJoystickCommand: interrupted");
+	Subsystems::pDriveSubsystem->DriveJoystick(0, 0);
 }
 
 double DriveJoystickCommand::clampJoystickValue(double value, double min,

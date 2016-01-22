@@ -17,9 +17,9 @@ public:
 	virtual double getTargetAngle();
 protected:
 	double targetDeltaAngle;
-	double targetAngle;
+	double startAngle;
 	double currentAngle;
-	static Parameter<double> PROPORTIONAL_CONSTANT;
+	static /*Parameter<*/double/*>*/ PROPORTIONAL_CONSTANT;
 };
 
 #endif

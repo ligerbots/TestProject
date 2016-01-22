@@ -1,75 +1,94 @@
 #include <TestProject.h>
 
-Parameter<double> TurnCommand::PROPORTIONAL_CONSTANT("TurnCommand_PROPORTIONAL_CONSTANT");
+double TurnCommand::PROPORTIONAL_CONSTANT = 0.15;
 
 TurnCommand::TurnCommand(double targetDeltaAngle) {
 	printf("TurnCommand: constructor\n");
 	Requires(Subsystems::pDriveSubsystem);
 	Requires(Subsystems::pNavXSubsystem);
 	this->targetDeltaAngle = targetDeltaAngle;
-	targetAngle = 0;
+	startAngle = 0;
 	currentAngle = 0;
 }
 
 void TurnCommand::Initialize() {
 	printf("TurnCommand::Initialize\n");
 	// make sure it doesn't get stuck turning forever if something fails
-	SetTimeout(2);
+	SetTimeout(3);
+	SetInterruptible(false);
 
-	currentAngle = RobotMap::pNavX->GetYaw() * M_PI / 180;
-	targetAngle = currentAngle + targetDeltaAngle;
+	double currentYaw = Subsystems::pYawSensor->getYaw();
+	if (currentYaw == YawSensor::YAW_INVALID) {
+		printf("Warning: No way to find yaw; using dead reckoning\n");
+		// todo: dead reckoning
+		SetTimeout(fabs(targetDeltaAngle) / M_PI);
+	} else {
+		currentAngle = Subsystems::pYawSensor->getYaw() * M_PI / 180;
+		startAngle = currentAngle;
+	}
 }
 
 void TurnCommand::Execute() {
-	printf("Turncommand::execute\n");
-	currentAngle = RobotMap::pNavX->GetYaw() * M_PI / 180;
-
-	double normalizedCurrentAngle = fmod(currentAngle + 2 * M_PI, 2 * M_PI);
-	double normalizedTargetAngle = fmod(currentAngle + 2 * M_PI, 2 * M_PI);
-	// find shortest way to reach target angle
-	double proportionalTurn;
-	// XXX: may not be the correct turn direction; depends on hardware
-	if (abs(normalizedTargetAngle - normalizedCurrentAngle)
-			< fmin(normalizedCurrentAngle, normalizedTargetAngle) + 2 * M_PI
-					- fmax(normalizedCurrentAngle, normalizedTargetAngle)) {
-		// rotating without going through 360 degrees
-		proportionalTurn = PROPORTIONAL_CONSTANT * (normalizedTargetAngle - normalizedCurrentAngle);
-	} else {
-		// rotating through 360 degrees
-		proportionalTurn = PROPORTIONAL_CONSTANT * (normalizedCurrentAngle - normalizedTargetAngle);
+	printf("TurnCommand::execute\n");
+	double currentYaw = Subsystems::pYawSensor->getYaw();
+	if (currentYaw == YawSensor::YAW_INVALID) {
+		printf("Warning: No way to find yaw; using dead reckoning\n");
+		Subsystems::pDriveSubsystem->DriveJoystick(0,
+				targetDeltaAngle > 0 ?
+						DriveJoystickCommand::TURN_MAX :
+						-DriveJoystickCommand::TURN_MAX);
+		return;
 	}
+	currentAngle = Subsystems::pYawSensor->getYaw() * M_PI / 180;
+	printf("TurnCommand: current angle %f\n", currentAngle);
 
-	proportionalTurn = DriveJoystickCommand::clampJoystickValue(proportionalTurn, -DriveJoystickCommand::TURN_MAX, DriveJoystickCommand::TURN_MAX);
+	double proportionalTurn = (fmod(startAngle + targetDeltaAngle + 4 * M_PI,
+			2 * M_PI) - fmod(currentAngle + 4 * M_PI, 2 * M_PI))
+			* PROPORTIONAL_CONSTANT;
+	if (targetDeltaAngle > 0)
+		proportionalTurn = fabs(proportionalTurn);
+	else
+		proportionalTurn = -fabs(proportionalTurn);
 
-	SmartDashboard::PutNumber("TurnCommand_currentAngle", currentAngle);
-	SmartDashboard::PutNumber("TurnCommand_targetAngle", targetAngle);
+	proportionalTurn = DriveJoystickCommand::clampJoystickValue(
+			proportionalTurn, -DriveJoystickCommand::TURN_MAX,
+			DriveJoystickCommand::TURN_MAX);
 
-	Subsystems::pDriveSubsystem->DriveJoystick(0,
-				proportionalTurn);
+	printf("TurnCommand: at %f / %f / turn is %f\n", fmod(currentAngle + 4 * M_PI, 2 * M_PI),
+			fmod(startAngle + targetDeltaAngle + 4 * M_PI,
+						2 * M_PI), proportionalTurn);
+
+	Subsystems::pDriveSubsystem->DriveJoystick(0, proportionalTurn);
 }
 
 bool TurnCommand::IsFinished() {
-	if (IsTimedOut())
+	if (IsTimedOut()) {
+		printf("TurnCommand: Timed Out\n");
 		return true;
-	double normalizedCurrentAngle = fmod(currentAngle + 2 * M_PI, 2 * M_PI);
-	double normalizedTargetAngle = fmod(currentAngle + 2 * M_PI, 2 * M_PI);
-	// max drift is about 1 degree. If we are within 2 degrees, consider it good
-	return abs(normalizedTargetAngle - normalizedCurrentAngle) < 2 * M_PI / 180;
+	}
+
+	double a1 = fmod(startAngle + targetDeltaAngle + 4 * M_PI,
+			2 * M_PI);
+	double a2 = fmod(currentAngle + 4 * M_PI, 2 * M_PI);
+	printf("TestCommand: %f / %f", a1, a2);
+
+	return fabs(a1 - a2) < 5.0 * M_PI / 180.0;
 }
 
 void TurnCommand::End() {
-	// reset drive to 0
 	Subsystems::pDriveSubsystem->DriveJoystick(0, 0);
+	CommandBase::pDriveJoystickCommand->Start();
 }
 
 void TurnCommand::setTargetAngle(double angle) {
-	targetAngle = angle;
+	targetDeltaAngle = angle;
 }
 
 double TurnCommand::getTargetAngle() {
-	return targetAngle;
+	return targetDeltaAngle;
 }
 
 void TurnCommand::Interrupted() {
 	printf("TurnCommand: interrupted!\n");
+	Subsystems::pDriveSubsystem->DriveJoystick(0, 0);
 }

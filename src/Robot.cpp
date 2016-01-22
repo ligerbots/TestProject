@@ -38,6 +38,10 @@ void Robot::RobotInit() {
 		pOperatorInterface->pLiveWindow->AddSensor("IMU", "Gyro",
 				RobotMap::pNavX);
 	}
+
+	CameraServer::GetInstance()->SetQuality(50);
+	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+
 	printf("RobotInit complete\n");
 }
 
@@ -74,6 +78,7 @@ void Robot::TeleopInit() {
 		CommandBase::pDriveJoystickCommand->Start();
 
 	testParam = 0;
+
 	printf("--- Teleop init ---\n");
 }
 

@@ -12,20 +12,11 @@
 #include <exception>
 
 /**
- * This macro throws an exception if there is currently an error in the specified WPILib object
- */
-#define THROW_IF_ERROR(errorBase) Error& MACRO_THROW_IF_ERROR_Error = errorBase->GetError();\
-	if(MACRO_THROW_IF_ERROR_Error.GetCode() != 0){\
-		throw WPILibException(&MACRO_THROW_IF_ERROR_Error);\
-	}
-// Terrible name to avoid name conflicts
-
-/**
- * This macro throws a std::runtime_exception if the parameter is null
+ * Throws a std::runtime_error if the specified pointer is null
  */
 #define THROW_IF_NULL(pointer) if(pointer == NULL){\
 		printf("Object " #pointer " is null!\n");\
-		throw std::runtime_error("Failed to initialize object (pointer is null)");\
+		throw std::runtime_error("Pointer " #pointer " is null");\
 	}
 
 /**
@@ -47,7 +38,6 @@
  */
 class WPILibException: public std::exception {
 public:
-
 	/**
 	 * Returns a description for the specified WPI Error
 	 * @param pWpiError The Error
@@ -58,10 +48,12 @@ public:
 
 	/**
 	 * Create a new WPILibException with the specified Error
-	 * @param wpiError_ The WPILib Error object, from an ErrorBase
+	 * @param pWpiObject The WPILib Error object, from an ErrorBase
 	 */
-	explicit WPILibException(Error* pWpiError_);
+	explicit WPILibException(Error* pWpiError);
+	explicit WPILibException(ErrorBase* pWpiObject);
 	virtual ~WPILibException() throw ();
+
 	/**
 	 * Get an error message for this exception.
 	 * Includes all the information the WPILib Error object has: message, file, line number, and function
@@ -70,9 +62,26 @@ public:
 	virtual const char* what() const throw ();
 
 	/**
-	 * The WPILib error object wrapped by this exception
+	 * Checks if the pointer is not null and there is no error
+	 * @param pWpiObject The pointer to check
+	 * @return True if you can use the object, false if not
 	 */
-	Error* pWpiError;
+	static bool isWPIObjectOK(ErrorBase* pWpiObject);
+
+	/**
+	 * This function throws an exception if there is currently an error in the specified WPILib object
+	 * Warning: Calls ClearError() if there is an error
+	 * @param pWpiObject The object to check
+	 * @throws WPILibException
+	 */
+	static void throwIfError(ErrorBase* pWpiObject);
+
+	/**
+	 * Reports and clears the error on a WPI object if there is one.
+	 * Warning: Calls ClearError() if there is an error
+	 * @param pWpiObject The object to check
+	 */
+	static void reportIfError(ErrorBase* pWpiObject);
 protected:
 	std::string errorDescription;
 };

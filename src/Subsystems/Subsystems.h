@@ -17,6 +17,9 @@ class Subsystems {
 public:
 	static DriveSubsystem* pDriveSubsystem;
 	static NavXSubsystem* pNavXSubsystem;
+
+	// sensors
+	static YawSensor* pYawSensor;
 	/**
 	 * Initializes all subsystems for the robot. Called in Robot constructor
 	 */

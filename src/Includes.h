@@ -3,3 +3,5 @@
 #include <math.h>
 #include <exception>
 #include <algorithm>
+#include <NIIMAQdx.h>
+#include <nivision.h>

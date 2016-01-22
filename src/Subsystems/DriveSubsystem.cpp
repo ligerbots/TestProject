@@ -2,6 +2,7 @@
 
 DriveSubsystem::DriveSubsystem() :
 		Subsystem("DriveSubsystem") {
+	// XXX: check if all motors are OK before initing
 	// set 1st motors to percentVbus mode
 	RobotMap::pDriveLeft1->SetControlMode(CANSpeedController::kPercentVbus);
 	RobotMap::pDriveRight1->SetControlMode(CANSpeedController::kPercentVbus);
@@ -25,7 +26,7 @@ DriveSubsystem::DriveSubsystem() :
 	pRobotDrive->SetMaxOutput(1);
 }
 
-DriveSubsystem::~DriveSubsystem(){
+DriveSubsystem::~DriveSubsystem() {
 	delete pRobotDrive;
 }
 
@@ -36,4 +37,33 @@ void DriveSubsystem::InitDefaultCommand() {
 
 void DriveSubsystem::DriveJoystick(double y, double x) {
 	pRobotDrive->ArcadeDrive(y, x);
+}
+
+bool DriveSubsystem::motorIsOk(CANTalon* motor, bool checkForFaults) {
+	bool valid = WPILibException::isWPIObjectOK(motor);
+	if (!valid)
+		return false;
+
+	if (!checkForFaults)
+		return true;
+
+	uint16_t faults = motor->GetFaults();
+	return faults == 0;
+}
+
+bool DriveSubsystem::encoderIsOk(CANTalon* motor) {
+	bool valid = WPILibException::isWPIObjectOK(motor);
+	if (!valid)
+		return false;
+
+	// clear any previous errors so we can test
+	WPILibException::reportIfError(motor);
+
+	motor->GetPosition();
+	if (motor->GetError().GetCode() == 0)
+		return true;
+	else {
+		motor->ClearError();
+		return false;
+	}
 }
