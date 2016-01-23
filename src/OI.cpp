@@ -18,6 +18,8 @@ OI::OI(const OI& other) :
 
 void OI::registerCommands() {
 	registerButton(pXboxController, 2, PRESSED, CommandBase::pTurn90Command);
+	// xxx: rename command to pLedToggleCommand
+	registerButton(pXboxController, 4, PRESSED, CommandBase::pAutonomousCommand);
 }
 
 void OI::registerButton(Joystick* pJoystick, int buttonNumber, ButtonEvent when,

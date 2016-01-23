@@ -6,6 +6,7 @@ CANTalon* RobotMap::pDriveLeft2 = NULL;
 CANTalon* RobotMap::pDriveRight1 = NULL;
 CANTalon* RobotMap::pDriveRight2 = NULL;
 AHRS* RobotMap::pNavX = NULL;
+Relay* RobotMap::pLedSpike = NULL;
 
 /**
  * Creates a new CANTalon or throws an exception on failure
@@ -52,6 +53,13 @@ void RobotMap::init() {
 	TRY_AND_REPORT_ERROR(
 			{ INITIALIZE_IF_NULL(pNavX, new AHRS(SPI::Port::kMXP)); THROW_IF_NULL(pNavX); },
 			errors = true);
+
+	// initialize spike for led ring
+	TRY_AND_REPORT_ERROR({
+		INITIALIZE_IF_NULL(pLedSpike, new Relay(LED_SPIKE));
+		THROW_IF_NULL(pLedSpike);
+		WPILibException::throwIfError(pLedSpike);
+	}, errors = true);
 
 	if (errors) {
 		printf("Problems initializing RobotMap\n");

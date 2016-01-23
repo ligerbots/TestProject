@@ -5,3 +5,8 @@
 #include <algorithm>
 #include <NIIMAQdx.h>
 #include <nivision.h>
+#include <CameraServer.h>
+#include <stdio.h>
+#include <limits.h>
+#include <string.h>
+#include <regex>

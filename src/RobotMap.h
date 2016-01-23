@@ -19,11 +19,14 @@ public:
 	static const int CAN_DRIVE_RIGHT1 = 4;
 	static const int CAN_DRIVE_RIGHT2 = 5;
 
+	static const int LED_SPIKE = 0;
+
 	static CANTalon* pDriveLeft1;
 	static CANTalon* pDriveLeft2;
 	static CANTalon* pDriveRight1;
 	static CANTalon* pDriveRight2;
 	static AHRS* pNavX;
+	static Relay* pLedSpike;
 
 	static void init();
 	static bool isInited();

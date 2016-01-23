@@ -2,7 +2,8 @@
 
 Robot* Robot::instance = NULL;
 
-Robot::Robot() : testParam("Test_Frame_Counter") {
+Robot::Robot() :
+		testParam("Test_Frame_Counter"), ticks(0) {
 	if (Robot::instance != NULL) {
 		printf("Warning: Robot instance already exists!\n");
 	}
@@ -39,14 +40,15 @@ void Robot::RobotInit() {
 				RobotMap::pNavX);
 	}
 
-	CameraServer::GetInstance()->SetQuality(50);
-	CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+	Camera::EnumerateCameras();
+	Camera::EnableCameras();
 
 	printf("RobotInit complete\n");
 }
 
 void Robot::DisabledPeriodic() {
 	Scheduler::GetInstance()->Run();
+	Camera::Feed(++ticks);
 }
 
 void Robot::AutonomousInit() {
@@ -55,8 +57,8 @@ void Robot::AutonomousInit() {
 		CommandBase::pDriveJoystickCommand->Cancel();
 
 	// start the autonomous command
-	if (CommandBase::pAutonomousCommand != NULL)
-		CommandBase::pAutonomousCommand->Start();
+//	if (CommandBase::pAutonomousCommand != NULL)
+//		CommandBase::pAutonomousCommand->Start();
 }
 
 void Robot::AutonomousPeriodic() {
@@ -84,9 +86,10 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
+	Camera::Feed(++ticks);
 
 	// using fancy operator methods on Parameter
-	if(pOperatorInterface->pDriverStation->GetStickButton(0, 3)){
+	if (pOperatorInterface->pDriverStation->GetStickButton(0, 3)) {
 		++testParam;
 	}
 	SmartDashboard::PutNumber("TestParameter", testParam.get());
@@ -178,6 +181,7 @@ void Robot::TeleopPeriodic() {
 
 void Robot::TestPeriodic() {
 	pOperatorInterface->pLiveWindow->Run();
+	Camera::Feed(++ticks);
 }
 
 START_ROBOT_CLASS(Robot);

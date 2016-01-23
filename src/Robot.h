@@ -19,6 +19,8 @@ public:
 
 	Parameter<int> testParam;
 
+	int ticks;
+
 	Robot();
 	virtual ~Robot();
 

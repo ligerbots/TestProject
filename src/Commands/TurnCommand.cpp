@@ -1,6 +1,6 @@
 #include <TestProject.h>
 
-double TurnCommand::PROPORTIONAL_CONSTANT = 0.15;
+double TurnCommand::PROPORTIONAL_CONSTANT = 0.3;
 
 TurnCommand::TurnCommand(double targetDeltaAngle) {
 	printf("TurnCommand: constructor\n");
@@ -14,7 +14,7 @@ TurnCommand::TurnCommand(double targetDeltaAngle) {
 void TurnCommand::Initialize() {
 	printf("TurnCommand::Initialize\n");
 	// make sure it doesn't get stuck turning forever if something fails
-	SetTimeout(3);
+	SetTimeout(2);
 	SetInterruptible(false);
 
 	double currentYaw = Subsystems::pYawSensor->getYaw();
