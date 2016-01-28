@@ -19,6 +19,9 @@ protected:
 	double targetDeltaAngle;
 	double startAngle;
 	double currentAngle;
+
+	Parameter<double> proportionalConstant;
+
 	static /*Parameter<*/double/*>*/ PROPORTIONAL_CONSTANT;
 };
 

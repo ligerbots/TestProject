@@ -3,7 +3,7 @@
 Robot* Robot::instance = NULL;
 
 Robot::Robot() :
-		testParam("Test_Frame_Counter"), ticks(0) {
+		testParam("Exposure"), ticks(0) {
 	if (Robot::instance != NULL) {
 		printf("Warning: Robot instance already exists!\n");
 	}
@@ -79,20 +79,23 @@ void Robot::TeleopInit() {
 	if (CommandBase::pDriveJoystickCommand != NULL)
 		CommandBase::pDriveJoystickCommand->Start();
 
-	testParam = 0;
+//	testParam = 50;
 
 	printf("--- Teleop init ---\n");
 }
 
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
+
+	Camera::GetCamera(0)->SetExposure(testParam.get());
 	Camera::Feed(++ticks);
 
-	// using fancy operator methods on Parameter
-	if (pOperatorInterface->pDriverStation->GetStickButton(0, 3)) {
-		++testParam;
-	}
-	SmartDashboard::PutNumber("TestParameter", testParam.get());
+	Subsystems::pYawSensor->getYaw();
+	// 38690
+	// 51300
+
+	// 40225
+	// 52661
 
 	if (RobotMap::pNavX) {
 		bool reset_yaw_button_pressed =

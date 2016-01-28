@@ -1,8 +1,8 @@
 #include <TestProject.h>
 
-double TurnCommand::PROPORTIONAL_CONSTANT = 0.3;
+double TurnCommand::PROPORTIONAL_CONSTANT = 0.5;
 
-TurnCommand::TurnCommand(double targetDeltaAngle) {
+TurnCommand::TurnCommand(double targetDeltaAngle): proportionalConstant("TurnCommand_P") {
 	printf("TurnCommand: constructor\n");
 	Requires(Subsystems::pDriveSubsystem);
 	Requires(Subsystems::pNavXSubsystem);
@@ -30,6 +30,9 @@ void TurnCommand::Initialize() {
 
 void TurnCommand::Execute() {
 	printf("TurnCommand::execute\n");
+
+	PROPORTIONAL_CONSTANT = proportionalConstant.get();
+
 	double currentYaw = Subsystems::pYawSensor->getYaw();
 	if (currentYaw == YawSensor::YAW_INVALID) {
 		printf("Warning: No way to find yaw; using dead reckoning\n");

@@ -30,7 +30,8 @@ YawSensor::~YawSensor() {
 }
 
 double YawSensor::getYaw(){
-	if(RobotMap::pNavX && RobotMap::pNavX->IsConnected() && !RobotMap::pNavX->IsCalibrating()){
+	// TODO: uncomment
+	if(/*RobotMap::pNavX && RobotMap::pNavX->IsConnected() && !RobotMap::pNavX->IsCalibrating()*/ false){
 		if(!haveNavX){
 			haveNavX = true;
 			navXOffsetYaw = RobotMap::pNavX->GetYaw() - lastYaw;
@@ -51,8 +52,12 @@ double YawSensor::getYaw(){
 			CANTalon* left = encoderLeft1 ? RobotMap::pDriveLeft1 : RobotMap::pDriveLeft2;
 			CANTalon* right = encoderRight1 ? RobotMap::pDriveRight1 : RobotMap::pDriveRight2;
 
+			SmartDashboard::PutNumber("LeftEncoder", left->GetPosition());
+			SmartDashboard::PutNumber("RightEncoder", right->GetPosition());
+
 			double offset = left->GetPosition() - right->GetPosition();
 			double angle = offset * DEGREES_PER_TICK;
+			SmartDashboard::PutNumber("EncoderAngle", angle);
 
 			if(!haveEncoders){
 				haveEncoders = true;

@@ -30,6 +30,10 @@ public:
 	void DumpModes();
 	IMAQdxError SetMode();
 	bool SetVideoMode(unsigned int x, unsigned int y, unsigned int fps, bool useJpeg);
+	void SetExposure(int percent);
+	void DumpExposureSettings();
+	static Camera* GetCamera(int number);
+	static int GetNumberOfCameras();
 	static int EnumerateCameras();
 	static uInt32 SwitchCamera();
 	static void StartCameras();
