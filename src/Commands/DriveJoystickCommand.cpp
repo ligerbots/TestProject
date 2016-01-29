@@ -46,7 +46,7 @@ void DriveJoystickCommand::End() {
 }
 
 void DriveJoystickCommand::Interrupted() {
-	printf("DriveJoystickCommand: interrupted");
+	printf("DriveJoystickCommand: interrupted\n");
 	Subsystems::pDriveSubsystem->DriveJoystick(0, 0);
 }
 

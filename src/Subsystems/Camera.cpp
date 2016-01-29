@@ -240,29 +240,34 @@ void Camera::Feed(int ticks) {
 		IMAQdxError imaqError = cameras[currentCamera]->GetFrame();
 		if (cameras[currentCamera]->frame != NULL) {
 			if (IMAQdxErrorSuccess == imaqError) {
-				if (overlay) {
-					int x, y;
-					Image *frame = cameras[currentCamera]->frame;
-					imaqGetImageSize(frame, &x, &y);
+				int error = ImageProcessing::IVA_ProcessImage(cameras[currentCamera]->frame);
+				if (error == 1) { //success
+					if (overlay) {
+						int x, y;
+						Image *frame = cameras[currentCamera]->frame;
+						imaqGetImageSize(frame, &x, &y);
 
-					// Draw box around image. Note -- because the camera is pointing up a little, it's not a rectangle
-					Point leftStart, leftEnd, rightStart, rightEnd;
-					// It's just magic numbers here. See the "Feeder station image measurements.xlsx" spreadsheet
-					leftStart.x = x * 0.387;
-					leftStart.y = y * 0.258;
-					leftEnd.x = x * 0.381;
-					leftEnd.y = y * (0.258 + 0.584);
-					imaqDrawLineOnImage(frame, frame, DrawMode::IMAQ_DRAW_VALUE,
-							leftStart, leftEnd, 1.0);
-					rightStart.x = x * (0.387 + 0.241);
-					rightStart.y = y * 0.258;
-					rightEnd.x = x * (0.381 + 0.249);
-					rightEnd.y = y * (0.258 + 0.584);
-					imaqDrawLineOnImage(frame, frame, DrawMode::IMAQ_DRAW_VALUE,
-							rightStart, rightEnd, 1.0);
+						// Draw box around image. Note -- because the camera is pointing up a little, it's not a rectangle
+						Point leftStart, leftEnd, rightStart, rightEnd;
+						// It's just magic numbers here. See the "Feeder station image measurements.xlsx" spreadsheet
+						leftStart.x = x * 0.387;
+						leftStart.y = y * 0.258;
+						leftEnd.x = x * 0.381;
+						leftEnd.y = y * (0.258 + 0.584);
+						imaqDrawLineOnImage(frame, frame,
+								DrawMode::IMAQ_DRAW_VALUE, leftStart, leftEnd,
+								1.0);
+						rightStart.x = x * (0.387 + 0.241);
+						rightStart.y = y * 0.258;
+						rightEnd.x = x * (0.381 + 0.249);
+						rightEnd.y = y * (0.258 + 0.584);
+						imaqDrawLineOnImage(frame, frame,
+								DrawMode::IMAQ_DRAW_VALUE, rightStart, rightEnd,
+								1.0);
+					}
+					LCameraServer::GetInstance()->SetImage(
+							cameras[currentCamera]->frame);
 				}
-				LCameraServer::GetInstance()->SetImage(
-						cameras[currentCamera]->frame);
 			}
 		}
 	}

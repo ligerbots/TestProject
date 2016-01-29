@@ -30,8 +30,7 @@ YawSensor::~YawSensor() {
 }
 
 double YawSensor::getYaw(){
-	// TODO: uncomment
-	if(/*RobotMap::pNavX && RobotMap::pNavX->IsConnected() && !RobotMap::pNavX->IsCalibrating()*/ false){
+	if(RobotMap::pNavX && RobotMap::pNavX->IsConnected() && !RobotMap::pNavX->IsCalibrating()){
 		if(!haveNavX){
 			haveNavX = true;
 			navXOffsetYaw = RobotMap::pNavX->GetYaw() - lastYaw;

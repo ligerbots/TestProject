@@ -87,10 +87,15 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
 	Scheduler::GetInstance()->Run();
 
+	if(ButtonUtils::joystickButtonPressed(3)){
+		ImageProcessing::toggleProcessingOn();
+	}
+
 	Camera::GetCamera(0)->SetExposure(testParam.get());
 	Camera::Feed(++ticks);
 
 	Subsystems::pYawSensor->getYaw();
+	// TODO: encoder values for 90 deg turn
 	// 38690
 	// 51300
 
